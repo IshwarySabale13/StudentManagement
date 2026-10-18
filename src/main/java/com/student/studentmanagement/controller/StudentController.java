@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import com.student.studentmanagement.dto.CourseStudentCountDTO;
 import com.student.studentmanagement.dto.DepartmentStudentCountDTO;
 import com.student.studentmanagement.model.Student;
 import com.student.studentmanagement.service.StudentService;
@@ -130,6 +131,12 @@ public class StudentController
 	public List<DepartmentStudentCountDTO> getStudentCountByDepartment()
 	{
 		return studentService.getStudentCountByDepartment();
+	}
+	
+	@GetMapping("/course-counts")
+	public List<CourseStudentCountDTO> getStudentCountByCourse()
+	{
+	    return studentService.getStudentCountByCourse();
 	}
 	
 }

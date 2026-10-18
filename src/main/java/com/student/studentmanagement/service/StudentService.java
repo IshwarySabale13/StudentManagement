@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.student.studentmanagement.dto.CourseStudentCountDTO;
 import com.student.studentmanagement.dto.DepartmentStudentCountDTO;
 import com.student.studentmanagement.exception.StudentNotFoundException;
 import com.student.studentmanagement.model.Student;
@@ -88,6 +89,27 @@ public class StudentService
 
 	    return departmentCounts;
 	}
+	
+
+	public List<CourseStudentCountDTO> getStudentCountByCourse()
+	{
+		List<Object[]> results = studentRepository.countStudentsByCourse();
+
+		List<CourseStudentCountDTO> courseCounts = new ArrayList<>();
+
+		for (Object[] row : results)
+		{
+			String courseName = (String) row[0];
+			long totalStudents = ((Number) row[1]).longValue();
+
+			courseCounts.add(
+					new CourseStudentCountDTO(courseName, totalStudents)
+					);
+		}
+
+		return courseCounts;
+	}
+
 	
 	public List<Student> searchStudentsByName(String name)
 	{

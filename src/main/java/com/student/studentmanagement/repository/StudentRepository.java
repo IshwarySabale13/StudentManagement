@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import com.student.studentmanagement.model.Course;
 
 import com.student.studentmanagement.model.Student;
 
@@ -18,4 +19,7 @@ public interface StudentRepository extends JpaRepository<Student , Long>
 	
 	@Query("SELECT d.name, COUNT(s) FROM Student s JOIN s.department d GROUP BY d.name")
 	List<Object[]> countStudentsByDepartment();
+	
+	@Query("SELECT c.name, COUNT(s) FROM Course c LEFT JOIN c.students s GROUP BY c.name")
+	List<Object[]> countStudentsByCourse();
 }
