@@ -20,6 +20,6 @@ public interface StudentRepository extends JpaRepository<Student , Long>
 	@Query("SELECT d.name, COUNT(s) FROM Student s JOIN s.department d GROUP BY d.name")
 	List<Object[]> countStudentsByDepartment();
 	
-	@Query("SELECT c.name, COUNT(s) FROM Course c LEFT JOIN c.students s GROUP BY c.name")
+	@Query("SELECT c.name, COUNT(s) FROM Course c LEFT JOIN c.students s GROUP BY c.name ORDER BY COUNT(s) DESC")
 	List<Object[]> countStudentsByCourse();
 }
