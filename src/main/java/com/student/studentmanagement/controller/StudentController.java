@@ -26,117 +26,102 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/students")
-public class StudentController 
-{
+public class StudentController {
 	@Autowired
 	private StudentService studentService;
-	
+
 	@PostMapping
-	public Student saveStudent(@Valid @RequestBody Student student)
-	{
+	public Student saveStudent(@Valid @RequestBody Student student) {
 		return studentService.saveStudent(student);
 	}
-	
+
 	@GetMapping
-	public List<Student> getAllStudents()
-	{
+	public List<Student> getAllStudents() {
 		return studentService.getAllStudents();
 	}
-	
+
 	@GetMapping("/search")
-	public List<Student> searchStudentsByName(@RequestParam String name)
-	{
-		return studentService.searchStudentsByName(name);  
+	public List<Student> searchStudentsByName(@RequestParam String name) {
+		return studentService.searchStudentsByName(name);
 	}
-	
+
 	@GetMapping("/{id}")
-	public Student getStudentById (@PathVariable Long id)
-	{
+	public Student getStudentById(@PathVariable Long id) {
 		return studentService.getStudentById(id);
 	}
-	
+
 	@PutMapping("/{id}")
-	public Student updateStudent(@PathVariable Long id , @Valid @RequestBody Student student)
-	{
+	public Student updateStudent(@PathVariable Long id, @Valid @RequestBody Student student) {
 		return studentService.updateStudent(id, student);
 	}
-	
+
+	@PutMapping("/{studentId}/courses/{courseId}")
+	public Student assignCourseToStudent(@PathVariable Long studentId, @PathVariable Long courseId) {
+		return studentService.assignCourseToStudent(studentId, courseId);
+	}
+
+	@DeleteMapping("/{studentId}/courses/{courseId}")
+	public Student removeCourseFromStudent(@PathVariable Long studentId, @PathVariable Long courseId) {
+		return studentService.removeCourseFromStudent(studentId, courseId);
+	}
+
 	@DeleteMapping("/{id}")
-	public void deleteStudent(@PathVariable Long id)
-	{
+	public void deleteStudent(@PathVariable Long id) {
 		studentService.deleteStudent(id);
 	}
-	//we are using fix path thats why no curly brackets  and {} means dyanamic data means can be changes as pr user request 
+
+	// we are using fix path thats why no curly brackets and {} means dyanamic data
+	// means can be changes as pr user request
 	@GetMapping("/page")
-	public Page<Student> getStudents(
-			@RequestParam(defaultValue = "0") int page, 
-			@RequestParam(defaultValue = "2") int size , 
-			@RequestParam(defaultValue = "id") String sortBy,
-	        @RequestParam(defaultValue = "asc") String direction
-	        )
-	{
-		 if (page < 0) 
-		    {
-		        throw new IllegalArgumentException("Page number cannot be negative");
-		    }
+	public Page<Student> getStudents(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "2") int size, @RequestParam(defaultValue = "id") String sortBy,
+			@RequestParam(defaultValue = "asc") String direction) {
+		if (page < 0) {
+			throw new IllegalArgumentException("Page number cannot be negative");
+		}
 
-		    if (size < 1) 
-		    {
-		        throw new IllegalArgumentException("Page size must be at least 1");
-		    }
-		    
-		    if (size > 100) 
-		    {
-		        throw new IllegalArgumentException("Page size cannot exceed 100");
-		    }
-		    
-		    if (!direction.equalsIgnoreCase("asc") && !direction.equalsIgnoreCase("desc")) 
-		    {
-		        throw new IllegalArgumentException("Sort direction must be 'asc' or 'desc'");
-		    }
-		    
-		    List<String> allowedSortFields = List.of
-		    (
-		            "id", "name", "email", "phone", "address"
-		    );
+		if (size < 1) {
+			throw new IllegalArgumentException("Page size must be at least 1");
+		}
 
-		    for (String field : sortBy.split(","))
-		    {
-		        if (!allowedSortFields.contains(field.trim())) 
-		        {
-		            throw new IllegalArgumentException
-		            (
-		                    "Invalid sort field: " + field.trim()
-		            );
-		        }
-		    }    
-		    
+		if (size > 100) {
+			throw new IllegalArgumentException("Page size cannot exceed 100");
+		}
+
+		if (!direction.equalsIgnoreCase("asc") && !direction.equalsIgnoreCase("desc")) {
+			throw new IllegalArgumentException("Sort direction must be 'asc' or 'desc'");
+		}
+
+		List<String> allowedSortFields = List.of("id", "name", "email", "phone", "address");
+
+		for (String field : sortBy.split(",")) {
+			if (!allowedSortFields.contains(field.trim())) {
+				throw new IllegalArgumentException("Invalid sort field: " + field.trim());
+			}
+		}
+
 		Sort sort = Sort.unsorted();
 
-	    for (String field : sortBy.split(",")) 
-	    {
-	        Sort fieldSort = direction.equalsIgnoreCase("desc")
-	                ? Sort.by(field.trim()).descending()
-	                : Sort.by(field.trim()).ascending();
+		for (String field : sortBy.split(",")) {
+			Sort fieldSort = direction.equalsIgnoreCase("desc") ? Sort.by(field.trim()).descending()
+					: Sort.by(field.trim()).ascending();
 
-	        sort = sort.and(fieldSort);
-	    }
-		 
-	    Pageable pageable = PageRequest.of(page, size , sort);
-	    
+			sort = sort.and(fieldSort);
+		}
+
+		Pageable pageable = PageRequest.of(page, size, sort);
+
 		return studentService.getAllStudents(pageable);
 	}
-	
+
 	@GetMapping("/department-counts")
-	public List<DepartmentStudentCountDTO> getStudentCountByDepartment()
-	{
+	public List<DepartmentStudentCountDTO> getStudentCountByDepartment() {
 		return studentService.getStudentCountByDepartment();
 	}
-	
+
 	@GetMapping("/course-counts")
-	public List<CourseStudentCountDTO> getStudentCountByCourse()
-	{
-	    return studentService.getStudentCountByCourse();
+	public List<CourseStudentCountDTO> getStudentCountByCourse() {
+		return studentService.getStudentCountByCourse();
 	}
-	
+
 }

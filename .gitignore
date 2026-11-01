@@ -33,4 +33,20 @@ build/
 .vscode/
 
 target/
-src/main/resources/application.properties
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local secret configuration
+application-local.properties
+application-secrets.properties
+
+# Log files
+*.log
+logs/
+
+# Operating system files
+.DS_Store
+Thumbs.db
