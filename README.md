@@ -126,22 +126,13 @@ Base URL:
 http://localhost:8081
 ```
 
-| Module             | Endpoint | Operations |
-------------------------------------------------
-| Authentication     | `/auth/register`                               | POST |
-| Authentication     | `/auth/login`                                   | POST |
-| Students           | `/students`                                      | GET, POST |
-| Students           | `/students/{id}`                                | GET, PUT, DELETE |
-| Student Search     | `/students/search?name=Amit`                  | GET |
-| Student Pagination | `/students/page`                                | GET |
-| Department Count   | `/students/department-counts`                | GET |
-| Course Count       | `/students/course-counts`                     | GET |
-| Departments        | `/departments`                                   | GET, POST |
-| Departments        | `/departments/{id}`                             | GET, PUT, DELETE |
-| Courses            | `/courses`                                        | GET, POST |
-| Courses            | `/courses/{id}`                                  | GET, PUT, DELETE |
-| Course Students    | `/courses/{id}/students`                       | GET |
-| Course Enrollment  | `/students/{studentId}/courses/{courseId}` | PUT, DELETE |
+| Module | Endpoint | Operations |
+|---|---|---|
+| Authentication | `/auth/register` | POST |
+| Authentication | `/auth/login` | POST |
+| Students | `/students` | GET, POST |
+| Departments | `/departments` | GET, POST |
+| Courses | `/courses` | GET, POST |
 
 ## Authorization Rules
 

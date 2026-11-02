@@ -13,9 +13,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.student.studentmanagement.dto.AuthResponse;
 import com.student.studentmanagement.dto.LoginRequest;
+import com.student.studentmanagement.dto.RegisterRequest;
 import com.student.studentmanagement.model.User;
 import com.student.studentmanagement.security.JwtService;
 import com.student.studentmanagement.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,18 +30,41 @@ public class AuthController {
 	private JwtService jwtService;
 
 	@PostMapping("/register")
-	public Map<String, String> registerUser(@RequestBody User user) {
-		user.setRole("USER");
-		try {
-			userService.registerUser(user);
-			return Map.of("message", "User registered successfully");
-		} catch (IllegalArgumentException exception) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-		}
+	public Map<String, String> registerUser(
+	        @Valid @RequestBody RegisterRequest request)
+	{
+
+	    User user = new User();
+
+	    user.setUsername(request.getUsername());
+	    user.setEmail(request.getEmail());
+	    user.setPassword(request.getPassword());
+	    user.setRole("USER");
+
+	    // Public registration always creates a USER
+	    user.setRole("USER");
+
+	    try
+	    {
+	        userService.registerUser(user);
+
+	        return Map.of(
+	            "message", "User registered successfully"
+	        );
+
+	    } 
+	    catch (IllegalArgumentException exception)
+	    {
+
+	        throw new ResponseStatusException(
+	            HttpStatus.BAD_REQUEST,
+	            exception.getMessage()
+	        );
+	    }
 	}
 
 	@PostMapping("/login")
-	public AuthResponse loginUser(@RequestBody LoginRequest request) {
+	public AuthResponse loginUser(@Valid @RequestBody LoginRequest request) {
 		try {
 			User user = userService.loginUser(request.getUsername(), request.getPassword());
 
