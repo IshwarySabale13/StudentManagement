@@ -64,7 +64,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/login")
-	public AuthResponse loginUser(@Valid @RequestBody LoginRequest request) {
+	public AuthResponse loginUser(@Valid @RequestBody LoginRequest request) 
+	{
 		try {
 			User user = userService.loginUser(request.getUsername(), request.getPassword());
 
@@ -72,7 +73,9 @@ public class AuthController {
 
 			return new AuthResponse(token, "Login successful");
 
-		} catch (IllegalArgumentException exception) {
+		} 
+		catch (IllegalArgumentException exception) 
+		{
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, exception.getMessage());
 		}
 	}
