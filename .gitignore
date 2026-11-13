@@ -50,3 +50,13 @@ logs/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Additional sensitive files
+*.pem
+*.key
+*.p12
+*.jks
+
+# IDE temporary files
+*.swp
+*.tmp
